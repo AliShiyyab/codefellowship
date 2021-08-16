@@ -1,7 +1,12 @@
 package com.example.codefellowship.classes;
 
+import com.example.codefellowship.repositories.ApplicationUserRepo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.persistence.*;
 import java.util.*;
@@ -9,18 +14,31 @@ import java.util.*;
 @Entity
 public class ApplicationUser implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @OneToMany
+    List<Post> post;
 
-    private String username;
-    private String password;
+    public List<Post> getPost() {
+        return post;
+    }
+
+    public void setPost(List<Post> post) {
+        this.post = post;
+    }
+
     private String firstName;
     private String lastName;
     private String dateOfBirth;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(unique = true)
+    private String username;
+    private String password;
+
     @Column(columnDefinition = "text")
     private String bio ;
+
 
     public ApplicationUser(){
 
@@ -40,12 +58,8 @@ public class ApplicationUser implements UserDetails {
         this.password = password ;
     }
 
-    //Relation
-    @OneToMany(mappedBy="applicationUser")
+    public Long getId(){return this.id;}
 
-    public Long getId() {
-        return id;
-    }
     public String getFirstName() {
         return firstName;
     }
@@ -101,10 +115,6 @@ public class ApplicationUser implements UserDetails {
         return username;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -124,4 +134,5 @@ public class ApplicationUser implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
