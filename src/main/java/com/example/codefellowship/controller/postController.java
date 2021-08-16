@@ -17,6 +17,6 @@ public class postController {
 
     @PostMapping("/addpost")
     public RedirectView addNewPost(@RequestParam String body){
-        
+
     }
 }
