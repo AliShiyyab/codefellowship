@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SignUp</title>
+</head>
+<body>
+  <h1 style="text-align:center">SignUp</h1>
+  <form action="#" th:action="@{/signUp}" method="post">
+      <h1>Sign Up</h1>
+      <div>
+          <label>User Name</label>
+          <input type="text" name="username"  placeholder="UserName">
+      </div>
+      <div>
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Password">
+      </div>
+      <div>
+          <label>First Name</label>
+          <input type="text" name="firstName" placeholder="FirstName">
+      </div>
+      <div>
+          <label>Last Name</label>
+          <input type="text" name="lastName" placeholder="LastName">
+      </div>
+      <div>
+          <label>Birth date</label>
+          <input type="text" name="dateOfBirth" placeholder="Date as String">
+      </div>
+      <div>
+          <label>Bio</label>
+          <input type="text" name="bio" placeholder="Bio">
+      </div>
+      <input type="submit" value="Signup"></input>
+  </form>
+</body>
+</html>
