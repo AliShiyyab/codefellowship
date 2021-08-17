@@ -19,19 +19,18 @@ public class postController {
     @Autowired
     private PostRepo postRepo;
 
-    @PostMapping("/addPost")
-    public RedirectView addPost(@RequestParam Long id , @RequestParam String body){
-        ApplicationUser appcontroller = applicationUserRepo.findById(id).orElseThrow();
-        Post post = new Post(body, appcontroller);
-        postRepo.save(post);
-        return new RedirectView("/");
-    }
-
-    @PostMapping("/post")
-    public RedirectView newPost(String body , Principal principal){
-        ApplicationUser a = applicationUserRepo.findByUsername(principal.getName());
-        Post newPost = new Post(body,a);
+    @PostMapping("/addpost")
+    public RedirectView addpost(Principal p , String body){
+        ApplicationUser user = applicationUserRepo.findByUsername(p.getName());
+        Post newPost = new Post(body, user);
         postRepo.save(newPost);
-        return new RedirectView("/");
+        return new RedirectView("/myProfile");
     }
+//    @PostMapping("/post")
+//    public RedirectView newPost(String body , Principal principal){
+//        ApplicationUser a = applicationUserRepo.findByUsername(principal.getName());
+//        Post newPost = new Post(body,a);
+//        postRepo.save(newPost);
+//        return new RedirectView("/users/" + a.getId());
+//    }
 }

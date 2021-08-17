@@ -12,9 +12,10 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Table(name = "application_user")
 public class ApplicationUser implements UserDetails {
 
-    @OneToMany
+    @OneToMany(mappedBy = "applicationUser")
     List<Post> post;
 
     public List<Post> getPost() {
@@ -38,7 +39,6 @@ public class ApplicationUser implements UserDetails {
 
     @Column(columnDefinition = "text")
     private String bio ;
-
 
     public ApplicationUser(){
 
@@ -135,4 +135,32 @@ public class ApplicationUser implements UserDetails {
         return true;
     }
 
+    @ManyToMany
+    @JoinTable(name="applicationUserAccount",
+    joinColumns = @JoinColumn(name = "followerUser"), inverseJoinColumns = @JoinColumn(name = "followwingUser"))
+    Set<ApplicationUser> following = new HashSet<>();
+
+    public void setFollowing(Set<ApplicationUser> following) {
+        this.following = following;
+    }
+
+    public Set<ApplicationUser> getFollowing() {
+        return following;
+    }
+
+    @ManyToMany(mappedBy = "following")
+    List<ApplicationUser> followers;
+
+    public List<ApplicationUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<ApplicationUser> followers) {
+        this.followers = followers;
+    }
+
+    public Set<ApplicationUser> addFollowing(ApplicationUser users){
+        this.following.add(users);
+        return this.following;
+    }
 }

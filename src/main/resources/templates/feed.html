@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:each="users:${followingUser}">
+    <div th:text="${users.getUsername}" ></div>
+            <div th:each="post:${users.getPost()}" >
+                <label>The Posts is : </label>
+                <span  th:text="'The Body ' + ${post.getBody()}"></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

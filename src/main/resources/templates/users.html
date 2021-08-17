@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<div th:each="appUser : ${appUsers}" style="border-style: solid; text-align: center;">
+  <h2 th:text="'Full UserName -> ' + ${appUser.getFirstName()} + '  ' + ${appUser.getLastName()}"></h2>
+  <p th:text="'date of birth -> ' + ${appUser.getDateOfBirth()}" ></p>
+  <p th:text="'Bio -> ' + ${appUser.getBio()}"></p>
+</div>
+
+</body>
+</html>
