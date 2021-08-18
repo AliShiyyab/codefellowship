@@ -6,11 +6,32 @@
 </head>
 <body>
     <h1>Profile Page</h1>
-    <img src="https://media.istockphoto.com/photos/anonymous-man-on-grey-shutter-door-picture-id640171532?k=6&m=640171532&s=612x612&w=0&h=qE2GDI1deMRBaujDtSKvVLTORbHv3PavQJCzgZQPd6I=" alt="Not Found"/>
-    <p th:text="${appId.username}"></p><br/>
-    <p th:text="${appId.firstName}"></p><br/>
-    <p th:text="${appId.lastName}"></p><br/>
-    <p th:text="${appId.dateOfBirth}"></p><br/>
-    <p th:text="${appId.bio}"></p><br/>
+    <div>
+        <img style="width: 200px;" src="https://media.istockphoto.com/photos/anonymous-man-on-grey-shutter-door-picture-id640171532?k=6&m=640171532&s=612x612&w=0&h=qE2GDI1deMRBaujDtSKvVLTORbHv3PavQJCzgZQPd6I=" alt="Not Found"/>
+        <p>User Name : <span th:text="${user.username}"></span></p>
+        <p>The First Name : <span th:text="${user.firstName}"></span></p>
+        <p>The Last Name : <span th:text="${user.lastName}"></span></p>
+        <p>The BD : <span th:text="${user.dateOfBirth}"></span></p>
+        <p>The Bio : <span th:text="${user.bio}"></span></p>
+    </div>
+    <form method="post" th:action="@{/follow/{id}(id=${user.id})}">
+        <button type="submit">Follow</button>
+    </form>
+    <br/><br/><br/>
+    <h1 style="text-align: center; color: blue;">User Post</h1>
+    <div>
+        <form style="text-align: center; border-style: inset; margin-left: 27%; margin-right: 27%; padding: 1.5%" method="POST" action="/addpost">
+            <label for="postBody">Write a new Post</label>
+            <input id="postBody" name="body" type="text">
+            <button type="submit">POST</button>
+            <div style="text-align: center;" th:each="post: ${user.post}">
+                <p>The Body : <span th:text="${post.body}"></span></p>
+                <p>The Date : <span th:text="${post.createAt}"></span></p>
+                <p>----------------------(ALI)----------------------</p>
+            </div>
+        </form>
+
+    </div><br/>
+
 </body>
 </html>

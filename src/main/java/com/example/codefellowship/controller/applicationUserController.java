@@ -2,6 +2,7 @@ package com.example.codefellowship.controller;
 
 import com.example.codefellowship.classes.ApplicationUser;
 import com.example.codefellowship.repositories.ApplicationUserRepo;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.convert.ApplicationConversionService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.security.Principal;
+
 
 @Controller
 public class applicationUserController {
@@ -22,28 +25,28 @@ public class applicationUserController {
     ApplicationUserRepo applicationUserRepo;
 
     @GetMapping("/")
-    public String getHomePage(Model m){
-//        m.addAttribute("userInfo" , applicationUserRepo.findByUsername("ALI"));
+    public String getHomePage(Model m , Principal principal){
         return "home.html";
     }
 
     @GetMapping("/users/{id}")
     public String getUserPage(Model m , @PathVariable Long id){
-        m.addAttribute("appId" , applicationUserRepo.findById(id).orElseThrow());
+        m.addAttribute("user" , applicationUserRepo.findById(id).get());
         return "profile.html";
+    }
+
+    @GetMapping("/users")
+    public String getAllUsers(Model model){
+        model.addAttribute("appUsers" , applicationUserRepo.findAll());
+        return "users" ;
     }
 
 
     @GetMapping("/myProfile")
-    public  String getMyProfilePage(Model m){
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ApplicationUser appUser = applicationUserRepo.findByUsername(userDetails.getUsername());
-        m.addAttribute("appUser" , appUser);
-        m.addAttribute("post" , appUser.getPost());
-        m.addAttribute("showLogout" , true);
-        m.addAttribute("username" , appUser.getUsername());
-        m.addAttribute("showUsername" , true);
-        return "profile";
+    public  String getMyProfilePage(Principal p,Model m){
+        ApplicationUser user = applicationUserRepo.findByUsername(p.getName());
+        m.addAttribute("user",user);
+        return "profile.html";
     }
 
     @Autowired
@@ -68,6 +71,24 @@ public class applicationUserController {
                                    @RequestParam String bio){
         ApplicationUser appUser = new ApplicationUser(username,bCryptPasswordEncoder.encode(password),firstName,lastName,dateOfBirth,bio);
         applicationUserRepo.save(appUser);
-        return new RedirectView("signIn");
+        return new RedirectView("/signIn");
     }
+
+    @PostMapping("/follow/{id}")
+    public RedirectView followUser(Principal p,@PathVariable("id") Long id){
+        ApplicationUser following = applicationUserRepo.findById(id).get();
+        ApplicationUser follower= applicationUserRepo.findByUsername(p.getName());
+        follower.addFollowing(following);
+        applicationUserRepo.save(follower);
+        return  new RedirectView("/users/"+id);
+    }
+
+    @GetMapping("/feed")
+    public String showFollower(Principal principal, Model model){
+        ApplicationUser applicationUser = applicationUserRepo.findByUsername(principal.getName());
+        model.addAttribute("followingUser" , applicationUser.getFollowers());
+        return "feed.html";
+
+    }
+
 }
